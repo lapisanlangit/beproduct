@@ -43,6 +43,14 @@ app.get("/getProducts", (req, res) => {
         code: "004",
         product: "Pencil",
       },
+         {
+        code: "005",
+        product: "Hat",
+      },
+         {
+        code: "006",
+        product: "Ruler",
+      },
      
     ];
   }

@@ -87,7 +87,7 @@ pipeline {
                                ssh ${DESTINATION_HOST} << EOFW
                                cd envfile
                                docker service create --env-file .env --network product-network --name svc-beproduct -p 5000:5000 -d ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
-                               docker service update --force svc-feproduct
+                               docker service update --force svc-beproduct
                               << EOF
                             ''' 
                 }

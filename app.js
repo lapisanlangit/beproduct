@@ -43,6 +43,10 @@ app.get("/getProducts", (req, res) => {
         code: "004",
         product: "Pencil",
       },
+      {
+        code: "005",
+        product: "Hat",
+      },
     ];
   }
   res.status(200).json({

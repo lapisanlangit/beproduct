@@ -4,19 +4,19 @@ pipeline {
 
     environment {
         GITHUB_REPO_URL = 'https://github.com/lapisanlangit/beproduct.git'
-        REGISTRY_URL = '192.168.1.8:6300'
-        DOCKER_IMAGE_NAME = '192.168.1.8:6300/beproduct'
+        REGISTRY_URL = '192.168.1.X:6300'
+        DOCKER_IMAGE_NAME = '192.168.1.X:6300/beproduct_jenkins'
         CONTAINER_NAME='beproduct'
         DOCKER_IMAGE_TAG = '1.0'
         DOCKER_LOGIN='dockerlogin'
-        DESTINATION_HOST = 'shayla@192.168.1.9'
+        DESTINATION_HOST = 'jati@192.168.1.X'
     }
 
     stages {
         stage('Clone Repository Github') {
             steps {
                 git branch: 'main', 
-                url: 'https://github.com/lapisanlangit/beproduct.git', 
+                url: GITHUB_REPO_URL, 
                 credentialsId: 'githublogin'
             }
         }
@@ -62,21 +62,50 @@ pipeline {
         }  
 
 
-        stage('Running BE Product') {
+        // stage('Running BE Product') {
+        //     steps {
+        //         script {      
+        //                     sh '''
+        //                        ssh ${DESTINATION_HOST} << EOF
+        //                        docker stop ${CONTAINER_NAME}
+        //                        docker rm ${CONTAINER_NAME}
+        //                        cd envfile
+        //                        docker run --env-file .env --name ${CONTAINER_NAME} -p 5000:5000 -d ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
+        //                       << EOF
+        //                     '''
+                         
+        //         }
+        //     }
+        // }       
+
+
+
+        stage('Running Docker Service BE Product') {
             steps {
                 script {      
                             sh '''
-                               ssh ${DESTINATION_HOST} << EOF
-                               docker stop ${CONTAINER_NAME}
-                               docker rm ${CONTAINER_NAME}
+                               ssh ${DESTINATION_HOST} << EOFW
                                cd envfile
-                               docker run --env-file .env --name ${CONTAINER_NAME} -p 5000:5000 -d ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
+                               docker service create --env-file .env --network product-network --name svc-beproduct -p 5000:5000 -d ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
+                               docker service update --force svc-feproduct
                               << EOF
-                            '''
-                         
+                            ''' 
                 }
             }
-        }       
+        }   
+
+    //  stage('Rolling Update  BE Product') {
+    //         steps {
+    //             script {      
+    //                         sh '''
+    //                            ssh ${DESTINATION_HOST} << EOF
+    //                            docker service update --image ${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG} --update-parallelism 2  --update-delay 10s svc-beproduct
+    //                           << EOF
+    //                         '''
+                         
+    //             }
+    //         }
+    //     }       
     
     }
 

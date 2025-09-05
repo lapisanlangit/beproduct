@@ -5,12 +5,12 @@ pipeline {
 
     environment {
         GITHUB_REPO_URL = 'https://github.com/lapisanlangit/beproduct.git'
-        REGISTRY_URL = '10.100.44.184:6300'
-        DOCKER_IMAGE_NAME = '10.100.44.184:6300/beproduct'
+        REGISTRY_URL = '192.168.1.X:6300'
+        DOCKER_IMAGE_NAME = '192.168.1.X:6300/beproduct'
         CONTAINER_NAME='beproduct'
         DOCKER_IMAGE_TAG = '1.0'
         DOCKER_LOGIN='dockerlogin'
-        DESTINATION_HOST = 'jati@10.100.44.184'
+        DESTINATION_HOST = 'jati@192.168.1.X'
     }
 
     stages {
